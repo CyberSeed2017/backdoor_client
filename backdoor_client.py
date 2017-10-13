@@ -5,9 +5,9 @@ import xml
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
-
 base_url = 'http://127.0.0.1:8000/api/'
 auth = ('Admin', 'Mike Knows')
+server_url = "http://127.0.0.1:8000/"
 
 def insert(payload, service):
     url = base_url + service
@@ -20,7 +20,7 @@ def insert(payload, service):
     return location
 
 def g(resource_uri):
-    response = requests.get("http://127.0.0.1:8000/" + resource_uri, auth=auth)
+    response = requests.get(server_url + resource_uri, auth=auth)
     data = response.json()
     return data
     #print (data)
@@ -36,11 +36,11 @@ def loadXML(xmlFile):
     for child in root:
         if child.tag == "SystemAdministratorUserProfile":
             
-            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username":  child[0].text, "groups" : ["/api/Group/2/",]}
+            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username":  child[0].text, "auth_group" : ["/api/Group/2/",]}
             User_DMurphy = insert(payload, "User/")
 
         elif child.tag == "DoctorUserProfile":
-            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "groups" : ["/api/Group/3/",]}
+            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "auth_group" : ["/api/Group/3/",]}
 
             User_KLibby = insert(payload, "User/")
 
@@ -49,7 +49,7 @@ def loadXML(xmlFile):
             Doctor_KLibby = insert(payload, "Doctor/")
 
         elif child.tag == "PatientUserProfile":
-            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "groups" : ["/api/Group/1/",]}
+            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "auth_group" : ["/api/Group/1/",]}
 
             User_MBishop = insert(payload, "User/")
 
@@ -58,7 +58,7 @@ def loadXML(xmlFile):
             Patient_MBishop = insert(payload, "Patient/")
 
         elif child.tag == "NurseUserProfile":
-            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "groups" : ["/api/Group/4/",]}
+            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "auth_group" : ["/api/Group/4/",]}
         
             User_KFlynn = insert(payload, "User/")
             
@@ -84,7 +84,7 @@ def loadXML(xmlFile):
             Nurse_KFlynn = insert(payload, "Nurse/")
                 
         elif child.tag == "MedicalAdministratorUserProfile":
-            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "groups" : ["/api/Group/5/",]}
+            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "auth_group" : ["/api/Group/5/",]}
         
             User_DLightman = insert(payload, "User/")
             
@@ -126,7 +126,7 @@ def loadXML(xmlFile):
             Med_Admin_DLightman = insert(payload, "Medical_Administrator/")
                 
         elif child.tag == "InsuranceAdministratorUserProfile":
-            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "groups" : ["/api/Group/6/",]}
+            payload = {"first_name": child[2].text, "is_staff": True, "last_name": child[3].text, "password": "3e06434338085d2ddf6ddcde204101f0", "username": child[0].text, "auth_group" : ["/api/Group/6/",]}
     
             User_PGarcia = insert(payload, "User/")
 
@@ -456,7 +456,20 @@ def loadXML(xmlFile):
     
             Raw_Record_uri = insert(payload, "Raw_Record/")
 
-
+def loadBackupCfg(cfgFile):
+    file = open(cfgFile, "w+")
+    file.write("offsite-server-ip = 172.17.0.2\n")
+    file.write("offsite-server-username = root\n")
+    file.write("offsite-server-password = appsec\n")
+    file.close()
+    
+def getBackupCfg():
+    try:
+        file = open("db_backup_2017.cfg", "r")
+        for line in file:
+            print line
+    except IOError:
+        print "No cfg loaded"
 
 
     #
@@ -489,3 +502,14 @@ if s == "setITAdmin":
 elif s == "loadData":
     xmlFile = sys.argv[2]
     loadXML(xmlFile)
+
+elif s == "loadBackupCfg":
+    cfgFile = sys.argv[2]
+    loadBackupCfg(cfgFile)
+
+elif s == "getBackupCfg":
+    getBackupCfg()
+
+elif s == "mysqldump":
+    print "sudo mysqldump -X SMIRK > smirkDBDump.xml"
+    print "DB Dump are saved into file smirkDBDump.xml"
