@@ -2,8 +2,10 @@
 
 ## simply run it using the following commands: 
 
-1) cd backdoor-client
-2) python backdoor_client.py <arg1>
-3) python backdoor_client.py
-4) python backdoor_client.py
-5) python backdoor_client.py
+
+### Scenerios:
+1) python unfBackdoorClient.py setITAdmin
+2) python backdoor_client.py loadData SMIRKSampleDB.xml
+3) python backdoor_client.py loadBackupCfg db_backup_2017.cfg
+4) python backdoor_client.py getBackupCfg
+5) python backdoor_client.py mysqldump
