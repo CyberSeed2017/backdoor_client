@@ -5,8 +5,8 @@ import xml
 from xml.dom import minidom
 import xml.etree.ElementTree as ET
 
-base_url = 'http://127.0.0.1:80/api/'
-server_url = "http://127.0.0.1:80/"
+base_url = 'http://192.168.0.12:80/api/'
+server_url = "http://192.168.0.12:80/"
 auth = ('Admin', 'Mike_Knows')
 
 def insert(payload, service):
