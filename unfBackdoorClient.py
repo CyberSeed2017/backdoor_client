@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 base_url = 'http://192.168.0.12:80/api/'
 server_url = "http://192.168.0.12:80/"
-auth = ('Admin', 'Mike_Knows')
+auth = ('Admin', 'LetMeIn@UNF')
 
 def insert(payload, service):
     url = base_url + service
